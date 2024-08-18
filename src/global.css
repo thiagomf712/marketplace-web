@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+body,
+input,
+textarea,
+button {
+  line-height: 1.2;
 }
 
 a {
