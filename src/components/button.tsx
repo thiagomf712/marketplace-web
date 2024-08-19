@@ -37,8 +37,6 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
-  BeforeIcon?: React.FC<React.SVGProps<SVGSVGElement>>
-  AfterIcon?: React.FC<React.SVGProps<SVGSVGElement>>
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
