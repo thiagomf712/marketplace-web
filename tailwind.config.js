@@ -44,6 +44,7 @@ export default {
         'action-sm': '0.875rem',
       },
       borderRadius: {
+        '2.5xl': '1.25rem',
         '4xl': '2rem',
       },
       spacing: {

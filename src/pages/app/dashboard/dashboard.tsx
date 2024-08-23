@@ -71,7 +71,7 @@ export function DashboardPage() {
   return (
     <main>
       <header className="mb-10">
-        <h2 className="font-bold text-title-md text-gray-500">
+        <h2 className="mb-2 font-bold text-title-md text-gray-500">
           Últimos 30 dias
         </h2>
 
@@ -82,7 +82,7 @@ export function DashboardPage() {
 
       <div className="flex gap-6">
         <div className="flex max-w-[240px] flex-col gap-4">
-          <div className="flex items-center gap-4 rounded-[20px] bg-white p-3 pr-7">
+          <div className="flex items-center gap-4 rounded-2.5xl bg-white p-3 pr-7">
             <div className="flex size-20 items-center justify-center rounded-xl bg-blue-light">
               <SaleTag02Icon className="size-10 text-blue-dark" />
             </div>
@@ -94,7 +94,7 @@ export function DashboardPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 rounded-[20px] bg-white p-3 pr-7">
+          <div className="flex items-center gap-4 rounded-2.5xl bg-white p-3 pr-7">
             <div className="flex size-20 items-center justify-center rounded-xl bg-blue-light">
               <Store04Icon className="size-10 text-blue-dark" />
             </div>
@@ -108,7 +108,7 @@ export function DashboardPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 rounded-[20px] bg-white p-3 pr-7">
+          <div className="flex items-center gap-4 rounded-2.5xl bg-white p-3 pr-7">
             <div className="flex size-20 items-center justify-center rounded-xl bg-blue-light">
               <UserMultipleIcon className="size-10 text-gray-300" />
             </div>
@@ -123,7 +123,7 @@ export function DashboardPage() {
           </div>
         </div>
 
-        <div className="flex-1 rounded-[20px] bg-white p-6 pb-5">
+        <div className="flex-1 rounded-2.5xl bg-white p-6 pb-5">
           <header className="mb-7 flex items-center justify-between">
             <h3 className="font-bold text-title-sm text-gray-500">
               Visitantes
