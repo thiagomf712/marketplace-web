@@ -89,7 +89,7 @@ export function SignUpPage() {
 
           <FileUploadInput
             error={errors.image?.message}
-            file={imgFile}
+            previewFile={imgFile}
             accept="image/*"
             {...register('image')}
           />

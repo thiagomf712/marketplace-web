@@ -28,8 +28,8 @@ const newProductSchema = z.object({
   value: z
     .string()
     .min(1, { message: 'Campo obrigatório' })
-    .transform((value) => Number(value.replace(/\D/, '')))
-    .refine((value) => value != null && !Number.isNaN(value), {
+    .transform((value) => value.replace(/\D/, ''))
+    .refine((value) => value != null && !Number.isNaN(Number(value)), {
       message: 'Digite um valor válido',
     }),
   description: z.string().min(1, { message: 'Campo obrigatório' }),
@@ -78,11 +78,11 @@ export function NewProductPage() {
 
       <form
         onSubmit={handleSubmit(handleCreateProduct)}
-        className="grid grid-cols-[min-content_max-content] items-start gap-6"
+        className="grid grid-cols-[min-content_1fr] items-start gap-6"
       >
         <FileUploadInput
           error={errors.image?.message}
-          file={imgFile}
+          previewFile={imgFile}
           accept="image/*"
           size="lg"
           {...register('image')}

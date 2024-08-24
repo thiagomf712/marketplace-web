@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { twMergeApp } from '@/config/twMerge'
+import { ProductStatusLabel } from '@/components/product-status-label'
 
 const statusLabel = {
   advised: { color: 'bg-blue-dark', label: 'anunciado' },
@@ -32,14 +32,7 @@ export function ProductsCard({ product }: ProductsCardProps) {
       />
 
       <div className="absolute right-2 top-2 flex items-center justify-end gap-1">
-        <span
-          className={twMergeApp(
-            'rounded-full px-2 py-1 text-label-sm font-medium uppercase text-white',
-            statusLabel[product.status].color,
-          )}
-        >
-          {statusLabel[product.status].label}
-        </span>
+        <ProductStatusLabel productStatus={product.status} />
 
         <span className="rounded-full bg-gray-400 px-2 py-1 text-label-sm font-medium uppercase text-white">
           {product.category}

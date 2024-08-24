@@ -7,23 +7,34 @@ export interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string
   error?: string
-  file?: FileList
+  previewFile?: FileList
   size?: 'sm' | 'lg'
+  previewUrl?: string
 }
 
 const FileUploadInput = forwardRef<HTMLInputElement, InputProps>(
   (
-    { label, error, size = 'sm', className, file, ...props }: InputProps,
+    {
+      label,
+      error,
+      size = 'sm',
+      className,
+      previewFile,
+      previewUrl,
+      ...props
+    }: InputProps,
     ref,
   ) => {
     const id = useId()
 
     let fileUrl = ''
 
-    if (file != null) {
+    if (previewFile != null) {
       try {
-        fileUrl = URL.createObjectURL(file[0])
+        fileUrl = URL.createObjectURL(previewFile[0])
       } catch {}
+    } else if (previewUrl != null) {
+      fileUrl = previewUrl
     }
 
     return (
