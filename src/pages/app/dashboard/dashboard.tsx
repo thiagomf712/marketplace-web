@@ -1,5 +1,6 @@
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { Helmet } from 'react-helmet-async'
 import {
   CartesianGrid,
   Line,
@@ -68,6 +69,8 @@ function CustomTooltip({
 export function DashboardPage() {
   return (
     <main>
+      <Helmet title="Dashboard" />
+
       <header className="mb-10">
         <h2 className="mb-2 font-bold text-title-md text-gray-500">
           Últimos 30 dias

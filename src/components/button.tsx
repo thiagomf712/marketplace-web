@@ -6,16 +6,19 @@ import { twMergeApp, twMergeConfig } from '@/config/twMerge'
 
 const buttonVariants = tv(
   {
-    base: 'flex items-center justify-center gap-3 rounded-[10px] transition-colors duration-200 font-medium',
+    base: twMergeApp(
+      'flex items-center justify-center gap-3 rounded-[10px] transition-colors duration-200 font-medium',
+      'disabled:cursor-not-allowed disabled:opacity-70',
+    ),
     variants: {
       variant: {
         primary: twMergeApp(
-          'bg-orange-base hover:bg-orange-dark text-white',
+          'bg-orange-base hover:enabled:bg-orange-dark text-white',
           '[&>svg]:text-white',
         ),
         outline: twMergeApp(
           'border border-orange-base text-orange-base hover:text-orange-dark hover:border-orange-base',
-          '[&>svg]:text-orange-base [&>svg]:hover:text-orange-dark',
+          '[&>svg]:text-orange-base [&>svg]:hover:enabled:text-orange-dark',
         ),
       },
       size: {

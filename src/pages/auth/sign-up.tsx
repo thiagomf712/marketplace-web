@@ -1,8 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { apiCreateSeller } from '@/api/create-seller'
+import { apiUploadAttachments } from '@/api/upload-attachments'
 import {
   AccessIcon,
   ArrowRight02Icon,
@@ -35,7 +40,7 @@ const signUpSchema = z
     cellphone: z
       .string()
       .min(1, { message: 'Campo obrigatório' })
-      .regex(/^([1-9]{2}) (?:[2-8]|9[0-9])[0-9]{3}-[0-9]{4}$/, {
+      .regex(/^\(([1-9]{2})\) (?:[2-8]|9[0-9])[0-9]{3}-[0-9]{4}$/, {
         message: 'Digite um número de celular válido (00) 00000-0000',
       }),
     email: z
@@ -53,6 +58,8 @@ const signUpSchema = z
 type SignUpSchema = z.infer<typeof signUpSchema>
 
 export function SignUpPage() {
+  const navigate = useNavigate()
+
   const {
     formState: { errors },
     register,
@@ -62,11 +69,52 @@ export function SignUpPage() {
     resolver: zodResolver(signUpSchema),
   })
 
-  const imgFile = watch('image')
+  const { mutateAsync: signUp, isPending: isSigningUp } = useMutation({
+    mutationFn: apiCreateSeller,
+    onSuccess() {
+      toast.success('Usuário criado com sucesso, faça login para continuar')
 
-  function handleSignUp(data: SignUpSchema) {
-    console.log(data)
+      navigate('/sign-in')
+    },
+    onError(error) {
+      if (isAxiosError(error)) {
+        switch (error.response?.status) {
+          case 404:
+            return toast.error('Avatar não encontrado')
+          case 409:
+            return toast.error('Esse e-mail ou telefone já está em uso')
+        }
+      }
+
+      toast.error('Erro ao tentar criar usuário')
+    },
+  })
+
+  const { mutateAsync: uploadImage, isPending: isUploadingImage } = useMutation(
+    {
+      mutationFn: apiUploadAttachments,
+      onError() {
+        toast.error('Erro ao tentar fazer upload da imagem')
+      },
+    },
+  )
+
+  async function handleSignUp(data: SignUpSchema) {
+    try {
+      const image = await uploadImage({ file: data.image })
+
+      await signUp({
+        avatarId: image.id,
+        phone: data.cellphone,
+        email: data.email,
+        name: data.name,
+        password: data.password,
+        passwordConfirmation: data.confirmPassword,
+      })
+    } catch (error) {}
   }
+
+  const imgFile = watch('image')
 
   return (
     <div className="flex flex-col rounded-4xl bg-white px-20 py-18">
@@ -144,7 +192,10 @@ export function SignUpPage() {
           />
         </section>
 
-        <Button className="justify-between">
+        <Button
+          className="justify-between"
+          disabled={isSigningUp || isUploadingImage}
+        >
           Cadastrar
           <ArrowRight02Icon />
         </Button>
