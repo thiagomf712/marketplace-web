@@ -45,8 +45,6 @@ function CustomTooltip({
   label,
   active,
 }: TooltipProps<ValueType, NameType>) {
-  console.log(payload, label, active)
-
   if (active) {
     return (
       <div className="rounded-lg bg-white p-3 shadow-md">

@@ -88,7 +88,6 @@ export function SignUpPage() {
           <h3 className="font-bold text-title-sm">Perfil</h3>
 
           <FileUploadInput
-            type="file"
             error={errors.image?.message}
             file={imgFile}
             accept="image/*"

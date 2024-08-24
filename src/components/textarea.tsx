@@ -1,17 +1,18 @@
-import { forwardRef, InputHTMLAttributes, ReactNode, useId } from 'react'
+import { forwardRef, ReactNode, TextareaHTMLAttributes, useId } from 'react'
 
 import { AlertCircleIcon } from '@/assets/icons/huge-icons'
 import { twMergeApp } from '@/config/twMerge'
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface TextareaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   Icon?: React.FC<React.SVGProps<SVGSVGElement>>
   Prefix?: ReactNode
   label?: string
   error?: string
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, type, Icon, error, Prefix, ...props }: InputProps, ref) => {
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ label, Icon, error, Prefix, ...props }: TextareaProps, ref) => {
     const id = useId()
 
     return (
@@ -26,11 +27,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
 
         <div className="flex flex-row-reverse items-center justify-start gap-2 border-b border-b-gray-100 px-0.5 group-focus-within:border-b-gray-400">
-          <input
-            type={type}
+          <textarea
             id={id}
             ref={ref}
-            className="peer h-full w-full py-3 text-gray-400 outline-none placeholder:text-gray-200"
+            className="peer h-full w-full resize-none py-3 text-gray-400 outline-none placeholder:text-gray-200"
             {...props}
           />
 
@@ -60,6 +60,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     )
   },
 )
-Input.displayName = 'Input'
+Textarea.displayName = 'Textarea'
 
-export { Input }
+export { Textarea }

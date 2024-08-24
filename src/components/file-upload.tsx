@@ -52,7 +52,7 @@ const FileUploadInput = forwardRef<HTMLInputElement, InputProps>(
           <div
             className={twMergeApp(
               'z-20 flex max-w-[160px] flex-col items-center gap-4',
-              file != null && 'sr-only group-hover:not-sr-only',
+              fileUrl !== '' && 'sr-only group-hover:not-sr-only',
             )}
           >
             <ImageUploadIcon

@@ -86,35 +86,16 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
 
         {label && (
           <label
-            className="text-label-md font-medium text-gray-300 peer-data-[state=open]:text-orange-base"
+            className="text-label-md font-medium uppercase text-gray-300 peer-data-[state=open]:text-orange-base"
             htmlFor={id}
           >
             {label}
           </label>
         )}
-
-        {/* <div className="flex flex-row-reverse items-center justify-start gap-2 border-b border-b-gray-100 px-0.5 group-focus-within:border-b-gray-400">
-          {Icon && (
-            <Icon
-              className={twMergeApp(
-                'size-6 text-gray-200 group-focus-within:text-orange-base',
-                error && 'text-danger',
-              )}
-            />
-          )}
-
-          <input
-            type={type}
-            id={id}
-            ref={ref}
-            className="peer h-full w-full py-3 text-gray-400 outline-none placeholder:text-gray-200"
-            {...props}
-          />
-        </div> */}
       </div>
     )
   },
 )
-Select.displayName = 'Input'
+Select.displayName = 'Select'
 
 export { Select }
