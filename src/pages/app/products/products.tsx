@@ -14,7 +14,7 @@ export function ProductsPage() {
   const status = searchParams.get('status')
 
   const { data: products, isLoading: isLoadingProducts } = useQuery({
-    queryKey: ['orders', search, status],
+    queryKey: ['products', search, status],
     queryFn: () =>
       apiGetSellerProducts({
         search: search || undefined,
@@ -52,7 +52,7 @@ export function ProductsPage() {
                 product={{
                   ...product,
                   category: product.category.title,
-                  img: product.attachments[0].url,
+                  img: product.attachments[0]?.url,
                   value: product.priceInCents,
                 }}
               />

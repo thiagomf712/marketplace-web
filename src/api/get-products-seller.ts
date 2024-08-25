@@ -7,7 +7,7 @@ export interface GetSellerProductsParams {
   search?: string
 }
 
-export interface SellerProduct {
+export interface Product {
   id: string
   title: string
   description: string
@@ -37,7 +37,7 @@ export interface SellerProduct {
 }
 
 export interface SellerProductResponse {
-  products: SellerProduct[]
+  products: Product[]
 }
 
 export async function apiGetSellerProducts(params: GetSellerProductsParams) {

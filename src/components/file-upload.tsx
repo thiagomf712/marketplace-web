@@ -29,7 +29,7 @@ const FileUploadInput = forwardRef<HTMLInputElement, InputProps>(
 
     let fileUrl = ''
 
-    if (previewFile != null) {
+    if (previewFile != null && previewFile.length > 0) {
       try {
         fileUrl = URL.createObjectURL(previewFile[0])
       } catch {}
