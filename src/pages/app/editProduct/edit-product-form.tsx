@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import { Controller, useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -63,9 +63,12 @@ export interface EditProductFormProps {
 }
 
 export function EditProductForm({ product }: EditProductFormProps) {
+  const navigate = useNavigate()
+
   const { data: categories } = useQuery({
     queryKey: ['categories'],
     queryFn: () => apiGetCategories(),
+    staleTime: 1000 * 60 * 60 * 24,
   })
 
   const { mutateAsync: updateProduct, isPending: isUpdatingProduct } =
@@ -74,22 +77,17 @@ export function EditProductForm({ product }: EditProductFormProps) {
       onSuccess(data) {
         toast.success('Produto atualizado com sucesso')
 
-        const cached = queryClient.getQueryData<Product[]>(['products'])
+        queryClient.setQueryData<Product[]>(['products'], (cached) =>
+          cached?.map((product) => {
+            if (product.id === data.id) {
+              return data
+            }
 
-        if (cached != null) {
-          queryClient.setQueryData<Product[]>(
-            ['products'],
-            cached.map((product) => {
-              if (product.id === data.id) {
-                return data
-              }
+            return product
+          }),
+        )
 
-              return product
-            }),
-          )
-        }
-
-        return { cached }
+        navigate('/products')
       },
       onError(error) {
         if (isAxiosError(error)) {
@@ -162,14 +160,11 @@ export function EditProductForm({ product }: EditProductFormProps) {
     } catch (error) {}
   }
 
-  const options = categories?.map<{ label: string; value: string }>(
-    (category) => ({
+  const options =
+    categories?.map<{ label: string; value: string }>((category) => ({
       label: category.title,
       value: category.id,
-    }),
-  )
-
-  console.log(disableForm, product.status)
+    })) ?? []
 
   return (
     <form

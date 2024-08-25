@@ -1,12 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { Controller, useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { apiCreateProduct } from '@/api/create-product'
+import { apiGetCategories } from '@/api/get-categories'
+import { Product } from '@/api/get-products-seller'
+import { apiUploadAttachments } from '@/api/upload-attachments'
 import { Button } from '@/components/button'
 import { FileUploadInput } from '@/components/file-upload'
 import { Input } from '@/components/input'
 import { Select } from '@/components/select'
 import { Textarea } from '@/components/textarea'
+import { queryClient } from '@/lib/react-query'
 
 const newProductSchema = z.object({
   image: z
@@ -38,16 +47,15 @@ const newProductSchema = z.object({
 
 type NewProductSchema = z.infer<typeof newProductSchema>
 
-const options: Array<{ label: string; value: string }> = [
-  { label: 'Brinquedo', value: 'Brinquedo' },
-  { label: 'Móvel', value: 'Móvel' },
-  { label: 'Papelaria', value: 'Papelaria' },
-  { label: 'Saúde & Beleza', value: 'Saúde & Beleza' },
-  { label: 'Utensílio', value: 'Utensílio' },
-  { label: 'Vestuário', value: 'Vestuário' },
-]
-
 export function NewProductPage() {
+  const navigate = useNavigate()
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => apiGetCategories(),
+    staleTime: 1000 * 60 * 60 * 24,
+  })
+
   const {
     handleSubmit,
     formState: { errors },
@@ -58,11 +66,60 @@ export function NewProductPage() {
     resolver: zodResolver(newProductSchema),
   })
 
+  const { mutateAsync: createProduct, isPending: isCreatingProduct } =
+    useMutation({
+      mutationFn: apiCreateProduct,
+      onSuccess(data) {
+        toast.success('Produto criado com sucesso')
+
+        queryClient.setQueryData<Product[]>(['products'], (cached) =>
+          cached ? [data, ...cached] : [data],
+        )
+
+        navigate('/products')
+      },
+      onError(error) {
+        if (isAxiosError(error)) {
+          switch (error.response?.status) {
+            case 404:
+              return toast.error('Categoria ou imagem não encontrada')
+          }
+        }
+
+        toast.error('Erro ao tentar atualizar o produto')
+      },
+    })
+
+  const { mutateAsync: uploadImage, isPending: isUploadingImage } = useMutation(
+    {
+      mutationFn: apiUploadAttachments,
+      onError() {
+        toast.error('Erro ao tentar fazer upload da imagem')
+      },
+    },
+  )
+
   const imgFile = watch('image')
 
-  function handleCreateProduct(data: NewProductSchema) {
-    console.log(data)
+  async function handleCreateProduct(data: NewProductSchema) {
+    try {
+      const image = await uploadImage({ file: data.image })
+
+      await createProduct({
+        attachmentsIds: [image.id],
+        categoryId: data.category,
+        description: data.description,
+        priceInCents: Number(data.value),
+        title: data.title,
+      })
+    } catch (error) {}
   }
+
+  const options =
+    categories?.map<{ label: string; value: string }>((category) => ({
+      label: category.title,
+      value: category.id,
+    })) ?? []
 
   return (
     <main>
@@ -160,11 +217,16 @@ export function NewProductPage() {
           </div>
 
           <div className="mt-10 grid grid-cols-2 items-center gap-3">
-            <Button type="button" variant="outline">
-              Cancelar
+            <Button type="button" variant="outline" asChild>
+              <Link to="/products">Cancelar</Link>
             </Button>
 
-            <Button type="submit">Salvar e publicar</Button>
+            <Button
+              type="submit"
+              disabled={isCreatingProduct || isUploadingImage}
+            >
+              Salvar e publicar
+            </Button>
           </div>
         </div>
       </form>
