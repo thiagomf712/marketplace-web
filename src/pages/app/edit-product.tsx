@@ -141,7 +141,7 @@ export function EditProductPage() {
               Dados do produto
             </h3>
 
-            <ProductStatusLabel productStatus="advised" />
+            <ProductStatusLabel productStatus="available" />
           </div>
 
           <div className="grid grid-cols-5 gap-5">

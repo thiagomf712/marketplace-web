@@ -1,13 +1,14 @@
+import { ProductStatus } from '@/api/get-products-seller'
 import { twMergeApp } from '@/config/twMerge'
 
-const statusLabel = {
-  advised: { color: 'bg-blue-dark', label: 'anunciado' },
-  sold: { color: 'bg-success', label: 'vendido' },
+const statusLabel: Record<ProductStatus, { color: string; label: string }> = {
+  available: { color: 'bg-blue-dark', label: 'Anunciado' },
+  sold: { color: 'bg-success', label: 'Vendido' },
   cancelled: { color: 'bg-gray-300', label: 'Desativado' },
-} as const
+}
 
 export interface ProductStatusLabel {
-  productStatus: keyof typeof statusLabel
+  productStatus: ProductStatus
 }
 
 export function ProductStatusLabel({ productStatus }: ProductStatusLabel) {

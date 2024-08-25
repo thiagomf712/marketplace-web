@@ -1,28 +1,24 @@
 import { Link } from 'react-router-dom'
 
+import { ProductStatus } from '@/api/get-products-seller'
 import { ProductStatusLabel } from '@/components/product-status-label'
-
-const statusLabel = {
-  advised: { color: 'bg-blue-dark', label: 'anunciado' },
-  sold: { color: 'bg-success', label: 'vendido' },
-  cancelled: { color: 'bg-gray-300', label: 'Desativado' },
-} as const
 
 export interface ProductsCardProps {
   product: {
+    id: string
     img: string
     title: string
     value: number
     description: string
     category: string
-    status: keyof typeof statusLabel
+    status: ProductStatus
   }
 }
 
 export function ProductsCard({ product }: ProductsCardProps) {
   return (
     <Link
-      to="/products/1"
+      to={`/products/${product.id}`}
       className="relative block w-full rounded-2.5xl border-2 border-white bg-white p-1 hover:border-2 hover:border-blue-base"
     >
       <img

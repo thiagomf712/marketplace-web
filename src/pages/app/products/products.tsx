@@ -1,7 +1,27 @@
+import { useQuery } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
+
+import { apiGetSellerProducts, ProductStatus } from '@/api/get-products-seller'
+
 import { ProductsCard } from './products-card'
+import { ProductsCardSkeleton } from './products-card-skeleton'
 import { ProductsFilter } from './products-filter'
 
 export function ProductsPage() {
+  const [searchParams] = useSearchParams()
+
+  const search = searchParams.get('search')
+  const status = searchParams.get('status')
+
+  const { data: products, isLoading: isLoadingProducts } = useQuery({
+    queryKey: ['orders', search, status],
+    queryFn: () =>
+      apiGetSellerProducts({
+        search: search || undefined,
+        status: status === 'all' ? undefined : (status as ProductStatus),
+      }),
+  })
+
   return (
     <main>
       <header className="mb-10">
@@ -20,20 +40,23 @@ export function ProductsPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          {Array.from({ length: 8 }).map((_, index) => (
-            <ProductsCard
-              key={index}
-              product={{
-                category: 'móvel',
-                description:
-                  'Sofá revestido em couro legítimo, com estrutura em madeira maciça e pés em metal cromado.',
-                img: 'https://github.com/thiagomf712.png',
-                status: 'advised',
-                title: 'Sofá',
-                value: 120090,
-              }}
-            />
-          ))}
+          {isLoadingProducts &&
+            Array.from({ length: 6 }).map((_, index) => (
+              <ProductsCardSkeleton key={index} />
+            ))}
+
+          {products &&
+            products.map((product) => (
+              <ProductsCard
+                key={product.id}
+                product={{
+                  ...product,
+                  category: product.category.title,
+                  img: product.attachments[0].url,
+                  value: product.priceInCents,
+                }}
+              />
+            ))}
         </div>
       </div>
     </main>

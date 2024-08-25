@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 
+import { ProductStatus } from '@/api/get-products-seller'
 import { SaleTag02Icon, Search01Icon } from '@/assets/icons/huge-icons'
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
@@ -14,20 +16,34 @@ const productsFilterSchema = z.object({
 
 type ProductsFilterSchema = z.infer<typeof productsFilterSchema>
 
-const options: Array<{ label: string; value: string }> = [
+const options: Array<{ label: string; value: ProductStatus | 'all' }> = [
   { label: 'Todos status', value: 'all' },
-  { label: 'Anunciado', value: 'advised' },
+  { label: 'Anunciado', value: 'available' },
   { label: 'Vendido', value: 'sold' },
   { label: 'Cancelado', value: 'cancelled' },
 ]
 
 export function ProductsFilter() {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const search = searchParams.get('search')
+  const status = searchParams.get('status')
+
   const { register, handleSubmit, control } = useForm<ProductsFilterSchema>({
     resolver: zodResolver(productsFilterSchema),
+    defaultValues: {
+      search: search || '',
+      status: status || 'all',
+    },
   })
 
   function handleSearch(data: ProductsFilterSchema) {
-    console.log(data)
+    setSearchParams((state) => {
+      state.set('search', data.search)
+      state.set('status', data.status)
+
+      return state
+    })
   }
 
   return (
@@ -43,7 +59,7 @@ export function ProductsFilter() {
 
         <Controller
           control={control}
-          name="search"
+          name="status"
           render={({ field }) => (
             <Select
               options={options}
