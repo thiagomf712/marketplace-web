@@ -55,7 +55,7 @@ export function SignInPage() {
 
   return (
     <>
-      <Helmet title="Autenticação" />
+      <Helmet title="Acessar" />
 
       <div className="flex h-full flex-col rounded-4xl bg-white px-20 py-18">
         <form

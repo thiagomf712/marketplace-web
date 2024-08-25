@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -117,100 +118,104 @@ export function SignUpPage() {
   const imgFile = watch('image')
 
   return (
-    <div className="flex flex-col rounded-4xl bg-white px-20 py-18">
-      <form
-        className="flex flex-col gap-12"
-        onSubmit={handleSubmit(handleSignUp)}
-      >
-        <header>
-          <h2 className="mb-2 font-bold text-title-md text-gray-500">
-            Crie sua conta
-          </h2>
+    <>
+      <Helmet title="Criar conta" />
 
-          <p className="text-body-sm text-gray-300">
-            Informe os seus dados pessoais e de acesso
-          </p>
-        </header>
-
-        <section className="flex flex-col gap-5">
-          <h3 className="font-bold text-title-sm">Perfil</h3>
-
-          <FileUploadInput
-            error={errors.image?.message}
-            previewFile={imgFile}
-            accept="image/*"
-            {...register('image')}
-          />
-
-          <Input
-            type="text"
-            placeholder="Seu nome completo"
-            label="Nome"
-            error={errors.name?.message}
-            Icon={UserIcon}
-            {...register('name')}
-          />
-
-          <Input
-            type="text"
-            placeholder="(00) 00000-0000"
-            label="Celular"
-            error={errors.cellphone?.message}
-            Icon={CallIcon}
-            {...register('cellphone')}
-          />
-        </section>
-
-        <section className="flex flex-col gap-5">
-          <h3 className="font-bold text-title-sm">Acesso</h3>
-
-          <Input
-            type="email"
-            placeholder="Seu e-mail"
-            label="E-mail"
-            error={errors.email?.message}
-            Icon={Mail02Icon}
-            {...register('email')}
-          />
-
-          <Input
-            type="password"
-            placeholder="Sua senha"
-            label="Senha"
-            Icon={AccessIcon}
-            error={errors.password?.message}
-            {...register('password')}
-          />
-
-          <Input
-            type="password"
-            placeholder="Confirme sua senha"
-            label="Confirmação de senha"
-            Icon={AccessIcon}
-            error={errors.confirmPassword?.message}
-            {...register('confirmPassword')}
-          />
-        </section>
-
-        <Button
-          className="justify-between"
-          disabled={isSigningUp || isUploadingImage}
+      <div className="flex flex-col rounded-4xl bg-white px-20 py-18">
+        <form
+          className="flex flex-col gap-12"
+          onSubmit={handleSubmit(handleSignUp)}
         >
-          Cadastrar
-          <ArrowRight02Icon />
-        </Button>
-      </form>
+          <header>
+            <h2 className="mb-2 font-bold text-title-md text-gray-500">
+              Crie sua conta
+            </h2>
 
-      <div className="mt-20">
-        <p className="mb-5 text-gray-300">Já tem uma conta?</p>
+            <p className="text-body-sm text-gray-300">
+              Informe os seus dados pessoais e de acesso
+            </p>
+          </header>
 
-        <Button variant="outline" className="w-full justify-between" asChild>
-          <Link to="/sign-in">
-            Acessar
+          <section className="flex flex-col gap-5">
+            <h3 className="font-bold text-title-sm">Perfil</h3>
+
+            <FileUploadInput
+              error={errors.image?.message}
+              previewFile={imgFile}
+              accept="image/*"
+              {...register('image')}
+            />
+
+            <Input
+              type="text"
+              placeholder="Seu nome completo"
+              label="Nome"
+              error={errors.name?.message}
+              Icon={UserIcon}
+              {...register('name')}
+            />
+
+            <Input
+              type="text"
+              placeholder="(00) 00000-0000"
+              label="Celular"
+              error={errors.cellphone?.message}
+              Icon={CallIcon}
+              {...register('cellphone')}
+            />
+          </section>
+
+          <section className="flex flex-col gap-5">
+            <h3 className="font-bold text-title-sm">Acesso</h3>
+
+            <Input
+              type="email"
+              placeholder="Seu e-mail"
+              label="E-mail"
+              error={errors.email?.message}
+              Icon={Mail02Icon}
+              {...register('email')}
+            />
+
+            <Input
+              type="password"
+              placeholder="Sua senha"
+              label="Senha"
+              Icon={AccessIcon}
+              error={errors.password?.message}
+              {...register('password')}
+            />
+
+            <Input
+              type="password"
+              placeholder="Confirme sua senha"
+              label="Confirmação de senha"
+              Icon={AccessIcon}
+              error={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
+            />
+          </section>
+
+          <Button
+            className="justify-between"
+            disabled={isSigningUp || isUploadingImage}
+          >
+            Cadastrar
             <ArrowRight02Icon />
-          </Link>
-        </Button>
+          </Button>
+        </form>
+
+        <div className="mt-20">
+          <p className="mb-5 text-gray-300">Já tem uma conta?</p>
+
+          <Button variant="outline" className="w-full justify-between" asChild>
+            <Link to="/sign-in">
+              Acessar
+              <ArrowRight02Icon />
+            </Link>
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
