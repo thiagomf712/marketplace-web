@@ -21,7 +21,7 @@ export function AccountMenu() {
 
   const { mutateAsync: signOut, isPending: isSigningOut } = useMutation({
     mutationFn: apiSignOut,
-    onMutate() {
+    onSuccess() {
       localStorage.removeItem(AUTH_TOKEN_KEY)
 
       queryClient.clear()
